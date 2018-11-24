@@ -1,0 +1,36 @@
+*.class
+ 
+#package file
+#要对接支付宝，不能去掉jar文件
+*.war
+*.ear
+
+#kdiff3 ignore
+*.orig
+
+#maven ignore
+target/ 
+
+#eclipse ignore
+.settings/
+.project
+.classpatch
+
+#idea
+.idea/
+/idea/
+*.ipr
+*.iml
+*.iws
+
+#temp file
+*.log
+*.cache
+*.diff
+*.patch
+*.tmp
+
+# system  ignore
+.DS_Store
+Thumbs.db
+
