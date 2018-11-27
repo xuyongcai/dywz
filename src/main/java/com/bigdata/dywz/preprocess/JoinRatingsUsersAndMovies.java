@@ -140,7 +140,7 @@ public class JoinRatingsUsersAndMovies {
         FileInputFormat.setInputPaths(job, new Path(args[0]));
 
         //删除已存在的输出目录
-        Path outputpath = new Path(args[2]);
+        Path outputpath = new Path(args[1]);
         FileSystem fileSystem = FileSystem.get(conf);
         if (fileSystem.exists(outputpath)){
             fileSystem.delete(outputpath, true);
