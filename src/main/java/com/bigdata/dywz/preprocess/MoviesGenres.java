@@ -1,7 +1,5 @@
 package com.bigdata.dywz.preprocess;
 
-import com.bigdata.dywz.classfy.MovieClassifyMapper;
-import com.bigdata.dywz.classfy.MovieClassifyReducer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -27,7 +25,6 @@ import java.util.Map;
 public class MoviesGenres {
 
     public static class MoviesGenresMapper extends Mapper<LongWritable, Text, UserAndGender, Text>{
-        private UserAndGender user_gender = new UserAndGender();
         private String splitter = "";
         private Text genres = new Text();
 
@@ -38,6 +35,8 @@ public class MoviesGenres {
 
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+
+            UserAndGender user_gender = new UserAndGender();
 
             String[] vals =  value.toString().split(splitter);
             user_gender.setUserID(vals[0]);
@@ -53,9 +52,10 @@ public class MoviesGenres {
             user_gender.setAge(Integer.parseInt(vals[2]));
             user_gender.setOccupation(vals[3]);
             user_gender.setZipCode(vals[4]);
+
             genres.set(vals[6]);
 
-            context.write(user_gender,genres);
+            context.write(user_gender, genres);
         }
     }
 
@@ -108,6 +108,12 @@ public class MoviesGenres {
      */
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 
+        if (args.length != 2){
+            args = new String[2];
+            args[0] = "/movie/users_movies/part-r-00000";
+            args[1] = "/movie/movies_genres";
+        }
+
         //创建configuration
         Configuration conf = new Configuration();
         conf.set("SPLITTER", "::");
@@ -119,20 +125,20 @@ public class MoviesGenres {
         job.setJarByClass(MoviesGenres.class);
 
         //设置Mapper相关
-        job.setMapperClass(MovieClassifyMapper.class);
+        job.setMapperClass(MoviesGenresMapper.class);
         job.setMapOutputKeyClass(UserAndGender.class);
         job.setMapOutputValueClass(Text.class);
 
         //设置Reducer类和相关参数
-        job.setReducerClass(MovieClassifyReducer.class);
+        job.setReducerClass(MoviesGenresReduser.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(NullWritable.class);
 
         //设置输入路径
-        FileInputFormat.setInputPaths(job, new Path(args[0]));
+        FileInputFormat.addInputPath(job, new Path(args[0]));
 
         //删除已存在的输出目录
-        Path outputpath = new Path(args[2]);
+        Path outputpath = new Path(args[1]);
         FileSystem fileSystem = FileSystem.get(conf);
         if (fileSystem.exists(outputpath)){
             fileSystem.delete(outputpath, true);

@@ -6,13 +6,12 @@ import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
-
-import javax.xml.soap.Text;
 
 
 /**
@@ -76,10 +75,10 @@ public class MovieClassify extends Configured implements Tool {
     public static Configuration getMyConfiguration() {
         Configuration conf = new Configuration();
         conf.setBoolean("mapreduce.app-submission.cross-platform", true);
-        conf.set("fs.defaultFS", "hdfs://master:9000"); //指定namenode
+        conf.set("fs.defaultFS", "hdfs://localhost:9000"); //指定namenode
         conf.set("mapreduce.framework.name","yarn"); //指定使用yarn框架
 
-        String resourcenode = "master";
+        String resourcenode = "localhost";
         conf.set("yarn.resourcemanager.address", resourcenode + ":8032"); //指定resourcemannager
         conf.set("yarn.resourcemanager.scheduer.address", resourcenode + ":8030"); //指定资源分配器
         conf.set("mapreduce.jobhistory.address", resourcenode + ":10020");

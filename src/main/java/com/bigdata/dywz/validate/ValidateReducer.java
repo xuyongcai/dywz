@@ -38,7 +38,7 @@ public class ValidateReducer extends Reducer<NullWritable, Text, DoubleWritable,
         }
 
         //计算正确率
-        double accuracy = sum/count;
+        double accuracy = (double) sum/count;
         context.write(new DoubleWritable(accuracy), NullWritable.get());
     }
 }

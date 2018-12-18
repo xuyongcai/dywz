@@ -12,9 +12,6 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
 
 /**
  * 4.数据清洗，缺失值、异常值都用0替换
@@ -56,13 +53,13 @@ public class DataProcessing{
                     context.getCounter(DataProcessingCounter.NullData).increment(0);
                 }
 
-                //判断每个字段的值是否为异常值，若是则用0代替
-                if (Integer.parseInt(vals[i]) < 0) {
-                    context.getCounter(DataProcessingCounter.AbnormalData).increment(1);
-                    vals[i] = "0";
+                //判断每个字段的值是否为异常值，若是则用0代替,如："-2"，"33-44"等都为异常
+                if (vals[i].matches("[0-9]+")) {
+                    context.getCounter(DataProcessingCounter.AbnormalData).increment(0);
 
                 } else {
-                    context.getCounter(DataProcessingCounter.AbnormalData).increment(0);
+                    context.getCounter(DataProcessingCounter.AbnormalData).increment(1);
+                    vals[i] = "0";
                 }
 
             }
@@ -75,7 +72,7 @@ public class DataProcessing{
                 if (i == 0) {
                     result.append(vals[i]);
                 } else {
-                    result.append(vals[i]).append(splitter);
+                    result.append(splitter).append(vals[i]);
                 }
             }
             context.write(new Text(result.toString()), NullWritable.get());
@@ -83,8 +80,16 @@ public class DataProcessing{
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+
+        if (args.length != 2){
+            args = new String[2];
+            args[0] = "/movie/movies_genres/part-r-00000";
+            args[1] = "/movie/processing_out";
+        }
+
         //创建configuration
         Configuration conf = new Configuration();
+        conf.set("SPLITTER", ",");
 
         //创建Job
         Job job = Job.getInstance(conf, "data_processing");
@@ -97,8 +102,11 @@ public class DataProcessing{
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(NullWritable.class);
 
+        //设置Reducer类和相关参数
+        job.setNumReduceTasks(0);
+
         //设置输入路径
-        FileInputFormat.setInputPaths(job, new Path(args[0]));
+        FileInputFormat.addInputPath(job, new Path(args[0]));
 
         //删除已存在的输出目录
         Path outputpath = new Path(args[1]);

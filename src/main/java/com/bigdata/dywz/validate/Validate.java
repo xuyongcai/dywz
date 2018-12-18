@@ -7,15 +7,15 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-import javax.xml.soap.Text;
-
 /**
+ * 7.评价分类结果的准确性
  * @author: xiaochai
  * @create: 2018-11-24
  **/
@@ -61,7 +61,8 @@ public class Validate extends Configured implements Tool {
         FileOutputFormat.setOutputPath(job, outputpath);
 
         //提交任务
-        return job.waitForCompletion(true) ? -1 : 1;
+        return job.waitForCompletion(true) ? 0 : 1;
+
     }
 
     /**
@@ -71,10 +72,10 @@ public class Validate extends Configured implements Tool {
     public static Configuration getMyConfiguration(){
         Configuration conf = new Configuration();
         conf.setBoolean("mapreduce.app-submission.cross-platform", true);
-        conf.set("fs.defaultFS", "hdfs://master:9000"); //指定namenode
+        conf.set("fs.defaultFS", "hdfs://localhost:9000"); //指定namenode
         conf.set("mapreduce.framework.name","yarn"); //指定使用yarn框架
 
-        String resourcenode = "master";
+        String resourcenode = "localhost";
         conf.set("yarn.resourcemanager.address", resourcenode + ":8032"); //指定resourcemannager
         conf.set("yarn.resourcemanager.scheduer.address", resourcenode + ":8030"); //指定资源分配器
         conf.set("mapreduce.jobhistory.address", resourcenode + ":10020");
@@ -85,8 +86,8 @@ public class Validate extends Configured implements Tool {
 
     public static void main(String[] args) {
         String[] myArgs = {
-                "/movies/knnout/part-r-00000",
-                "/movies/validateout",
+                "/movie/knnout/part-r-00000",
+                "/movie/validateout",
                 ","
         };
 

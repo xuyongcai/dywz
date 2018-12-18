@@ -7,18 +7,18 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapred.FileSplit;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * 2.连接movies.dat数据与ratings_users数据
+ * 2.连接movies.dat数据与users_ratings数据
  * @author: xiaochai
  * @create: 2018-11-24
  **/
@@ -45,6 +45,11 @@ public class JoinRatingsUsersAndMovies {
 
             //将文件名作为两个文件数据的标识
             if(name.startsWith("movies")){ //部分电影信息数据处理,movies.dat
+                user_movies.setUserID("");
+                user_movies.setGender("");
+                user_movies.setAge(-1);
+                user_movies.setOccupation("");
+                user_movies.setZipCode("");
                 user_movies.setMovieID(values[0]);
                 user_movies.setGenres(values[2]);
                 user_movies.setFlag("movies");
@@ -59,7 +64,8 @@ public class JoinRatingsUsersAndMovies {
                 user_movies.setOccupation(values[3]);
                 user_movies.setZipCode(values[4]);
                 user_movies.setMovieID(values[5]);
-                user_movies.setFlag("ratings_users");
+                user_movies.setGenres("");
+                user_movies.setFlag("users_ratings");
 
                 k.set(values[5]);
 
@@ -117,6 +123,13 @@ public class JoinRatingsUsersAndMovies {
      */
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 
+        if (args.length != 3){
+            args = new String[3];
+            args[0] = "/movie/users_ratings/part-r-00000";
+            args[1] = "/movie/origin_data/movies.dat";
+            args[2] = "/movie/users_movies";
+        }
+
         //创建configuration
         Configuration conf = new Configuration();
 
@@ -137,10 +150,11 @@ public class JoinRatingsUsersAndMovies {
         job.setOutputValueClass(NullWritable.class);
 
         //设置输入路径
-        FileInputFormat.setInputPaths(job, new Path(args[0]));
+        FileInputFormat.addInputPath(job, new Path(args[0]));
+        FileInputFormat.addInputPath(job, new Path(args[1]));
 
         //删除已存在的输出目录
-        Path outputpath = new Path(args[1]);
+        Path outputpath = new Path(args[2]);
         FileSystem fileSystem = FileSystem.get(conf);
         if (fileSystem.exists(outputpath)){
             fileSystem.delete(outputpath, true);

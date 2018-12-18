@@ -1,10 +1,16 @@
 package com.bigdata.dywz.preprocess;
 
+import org.apache.hadoop.io.Writable;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 /**
  * @author: xiaochai
  * @create: 2018-11-24
  **/
-public class UserAndMovies {
+public class UserAndMovies implements Writable {
     private String userID;
     private String gender;
     private Integer age;
@@ -83,6 +89,32 @@ public class UserAndMovies {
     public String toString() {
         return userID + "::" + gender + "::" + age + "::" + occupation + "::"
                 + zipCode + "::" + movieID + "::" + genres;
+    }
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        out.writeUTF(userID);
+        out.writeUTF(gender);
+        out.writeInt(age);
+        out.writeUTF(occupation);
+        out.writeUTF(zipCode);
+        out.writeUTF(movieID);
+        out.writeUTF(genres);
+
+        out.writeUTF(flag);
+    }
+
+    @Override
+    public void readFields(DataInput in) throws IOException {
+        this.userID = in.readUTF();
+        this.gender = in.readUTF();
+        this.age = in.readInt();
+        this.occupation = in.readUTF();
+        this.zipCode = in.readUTF();
+        this.movieID = in.readUTF();
+        this.genres = in.readUTF();
+
+        this.flag = in.readUTF();
     }
 }
 

@@ -19,7 +19,7 @@ import java.io.InputStreamReader;
 public class AllJob {
     public static void main(String[] args) throws IOException {
         Configuration conf = new Configuration();
-        conf.set("fs.defaultFS", "hdfs://master:9000"); //指定namenode
+        conf.set("fs.defaultFS", "hdfs://localhost:9000"); //指定namenode
 
         FileSystem fs = FileSystem.get(conf);
         double maxAccuracy = 0;
@@ -49,7 +49,7 @@ public class AllJob {
             };
 
             try {
-                ToolRunner.run(Validate.getMyConfiguration(), new Validate(), classifyArgs);
+                ToolRunner.run(Validate.getMyConfiguration(), new Validate(), validateArgs);
             } catch (Exception e) {
                 e.printStackTrace();
             }

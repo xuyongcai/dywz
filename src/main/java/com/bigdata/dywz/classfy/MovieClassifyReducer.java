@@ -82,7 +82,7 @@ public class MovieClassifyReducer extends Reducer<Text, DistanceAndLabel, Text, 
         }
 
         String[] tmp = new String[result.size()];
-        result.toArray();
+        result.toArray(tmp);
         Arrays.sort(tmp, new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {

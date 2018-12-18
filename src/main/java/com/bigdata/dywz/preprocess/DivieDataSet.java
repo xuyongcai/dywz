@@ -85,7 +85,7 @@ public class DivieDataSet {
 
     public static void main(String[] args) throws IOException {
         Configuration conf = new Configuration();
-        conf.set("fs.defaultFS", "master:9000");
+        conf.set("fs.defaultFS", "localhost:9000");
         FileSystem fs = FileSystem.get(conf);
 
         //获取预处理后的电影数据路径
@@ -101,20 +101,20 @@ public class DivieDataSet {
         Set<Integer> validate_index = validateIndex(dataSize, train_index);
 
         //训练数据存放的路径
-        Path train = new Path("hdfs://master:9000/movie/trainData");
+        Path train = new Path("hdfs://localhost:9000/movie/trainData");
         fs.delete(train, true);
         FSDataOutputStream os1 = fs.create(train);
         BufferedWriter bw1 = new BufferedWriter(new OutputStreamWriter(os1));
 
 
         //测试数据存放的路径
-        Path test = new Path("hdfs://master:9000/movie/testData");
+        Path test = new Path("hdfs://localhost:9000/movie/testData");
         fs.delete(test, true);
         FSDataOutputStream os2 = fs.create(test);
         BufferedWriter bw2 = new BufferedWriter(new OutputStreamWriter(os2));
 
         //验证数据存放的路径
-        Path validate = new Path("hdfs://master:9000/movie/validateData");
+        Path validate = new Path("hdfs://localhost:9000/movie/validateData");
         fs.delete(validate, true);
         FSDataOutputStream os3 = fs.create(validate);
         BufferedWriter bw3 = new BufferedWriter(new OutputStreamWriter(os3));
