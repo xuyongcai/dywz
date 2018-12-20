@@ -34,14 +34,12 @@ movies_genres_o=/movie/movies_genres
 hadoop jar /Users/xuyongcai/IdeaProjects/dywz/target/dywz-1.0.jar com.bigdata.dywz.preprocess.MoviesGenres \
 $movies_genres_i $movies_genres_o
 
-
 #4.数据清洗，缺失值、异常值都用0替换
 processing_i=/movie/movies_genres/part-r-00000
 processing_o=/movie/processing_out
 
 hadoop jar /Users/xuyongcai/IdeaProjects/dywz/target/dywz-1.0.jar com.bigdata.dywz.preprocess.MoviesGenres \
 $processing_i $processing_o
-
 
 #5.划分数据集类
 hadoop jar /Users/xuyongcai/IdeaProjects/dywz/target/dywz-1.0.jar com.bigdata.dywz.preprocess.DivieDataSet
