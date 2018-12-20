@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 3.对每个用户看过对电影类型进行统计
+ * 3.对每个用户看过的电影类型进行统计
  * (1::F::1::10::48067::914::Musical|Romance) -> (1,1,1,10,48067,0,2,6,18,0,14,...)
  * @author: xiaochai
  * @create: 2018-11-23
@@ -148,7 +148,5 @@ public class MoviesGenres {
 
         //提交任务
         System.exit(job.waitForCompletion(true) ? 0 : 1);
-
     }
-
 }

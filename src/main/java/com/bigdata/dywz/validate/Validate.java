@@ -15,7 +15,7 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 /**
- * 7.评价分类结果的准确性
+ * 7.z
  * @author: xiaochai
  * @create: 2018-11-24
  **/

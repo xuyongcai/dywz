@@ -80,7 +80,6 @@ public class UserAndGender implements WritableComparable<UserAndGender> {
         this.zipCode = in.readUTF();
     }
 
-
     @Override
     public int compareTo(UserAndGender o) {
         return this.userID.compareTo(o.getUserID());

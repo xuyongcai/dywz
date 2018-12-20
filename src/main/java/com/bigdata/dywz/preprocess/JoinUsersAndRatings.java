@@ -67,9 +67,7 @@ public class JoinUsersAndRatings {
                 user_movies.setFlag("ratings");
 
                 k.set(values[0]);
-
             }
-
             context.write(k, user_movies);
         }
     }
@@ -167,6 +165,5 @@ public class JoinUsersAndRatings {
 
         //提交任务
         System.exit(job.waitForCompletion(true) ? 0 : 1);
-
     }
 }

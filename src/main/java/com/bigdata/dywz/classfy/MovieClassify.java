@@ -20,8 +20,6 @@ import org.apache.hadoop.util.ToolRunner;
  * @create: 2018-11-22
  **/
 public class MovieClassify extends Configured implements Tool {
-
-
     @Override
     public int run(String[] args) throws Exception {
 

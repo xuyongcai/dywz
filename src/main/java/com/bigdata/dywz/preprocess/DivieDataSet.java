@@ -89,7 +89,7 @@ public class DivieDataSet {
         FileSystem fs = FileSystem.get(conf);
 
         //获取预处理后的电影数据路径
-        Path movieData = new Path("/movie/processing_out/part-m-00000");
+        Path movieData = new Path("hdfs://localhost:9000/movie/processing_out/part-m-00000");
 
         //得到电影数据大小
         int dataSize = getSize(fs, movieData);

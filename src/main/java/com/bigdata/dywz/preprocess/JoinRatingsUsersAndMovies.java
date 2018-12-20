@@ -164,6 +164,5 @@ public class JoinRatingsUsersAndMovies {
 
         //提交任务
         System.exit(job.waitForCompletion(true) ? 0 : 1);
-
     }
 }
